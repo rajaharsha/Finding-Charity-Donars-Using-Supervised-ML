@@ -60,11 +60,11 @@ def evaluate(results, accuracy, f1):
     """
   
     # Create figure
-    fig, ax = pl.subplots(2, 4, figsize = (11,7))
+    fig, ax = pl.subplots(2, 3, figsize = (11,7))
 
     # Constants
     bar_width = 0.3
-    colors = ['#A00000','#00A0A0','#00A000']
+    colors = ['#A04000','#00A0A0','#0032A0']
     
     # Super loop to plot four panels of data
     for k, learner in enumerate(results.keys()):
@@ -72,11 +72,11 @@ def evaluate(results, accuracy, f1):
             for i in np.arange(3):
                 
                 # Creative plot code
-                ax[j//3, j%3].bar(i+k*bar_width, results[learner][i][metric], width = bar_width, color = colors[k])
-                ax[j//3, j%3].set_xticks([0.45, 1.45, 2.45])
-                ax[j//3, j%3].set_xticklabels(["1%", "10%", "100%"])
-                ax[j//3, j%3].set_xlabel("Training Set Size")
-                ax[j//3, j%3].set_xlim((-0.1, 3.0))
+                ax[j/3, j%3].bar(i+k*bar_width, results[learner][i][metric], width = bar_width, color = colors[k])
+                ax[j/3, j%3].set_xticks([0.45, 1.45, 2.45])
+                ax[j/3, j%3].set_xticklabels(["1%", "10%", "100%"])
+                ax[j/3, j%3].set_xlabel("Training Set Size")
+                ax[j/3, j%3].set_xlim((-0.1, 3.0))
     
     # Add unique y-labels
     ax[0, 0].set_ylabel("Time (in seconds)")
@@ -106,14 +106,12 @@ def evaluate(results, accuracy, f1):
     ax[1, 1].set_ylim((0, 1))
     ax[1, 2].set_ylim((0, 1))
 
-    # Set additional plots invisibles
-    ax[0, 3].set_visible(False)
-    ax[1, 3].axis('off')
-
-    # Create legend
+    # Create patches for the legend
+    patches = []
     for i, learner in enumerate(results.keys()):
-        pl.bar(0, 0, color=colors[i], label=learner)
-    pl.legend()
+        patches.append(mpatches.Patch(color = colors[i], label = learner))
+    pl.legend(handles = patches, bbox_to_anchor = (-.80, 2.53), \
+               loc = 'upper center', borderaxespad = 0., ncol = 3, fontsize = 'x-large')
     
     # Aesthetics
     pl.suptitle("Performance Metrics for Three Supervised Learning Models", fontsize = 16, y = 1.10)
